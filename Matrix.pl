@@ -19,13 +19,11 @@
 main:-
 	k(K),
 	l(L),
-	z(Z)
-	%toString(X).
-	sum(K, L, Z),
-	write(Z).
+	m(M),
+	%% sum( K, L, X),
+	transpose( M, X), 
+	write(X).
 
-% Will hold the answer
- z([]).
 
  k([ 
  	[  2,  0,  1,  3 ],
@@ -47,19 +45,38 @@ main:-
  	]).
 
 
-sum([A | List1 ],[ B | List2], [ C | List3]):-
-	D is A + B,
-	sum( List1, List2, [ D | C List3 ])
-.
+% ============================================= Sum (i,i,o)
+% Matrix is empty
+sum([ [] | [] ], [ [] | [] ], [ [] | []]):- !.
+
+% End of Row?
+sum([ [] | ColumsA ] ,[ [] | ColumnsB ], [ [] | ListC ]):-
+	sum(ColumsA, ColumnsB, ListC).
+
+% Main Method
+sum( [ [ EntryA | ColumnsA] | RowsA ], [ [ EntryB | ColumnsB] | RowsB], [ [ EntryC | ColumnsC ] | RowsC]):-
+	EntryC is EntryA + EntryB,
+	sum( [ ColumnsA | RowsA], [ColumnsB | RowsB], [ColumnsC| RowsC]).
 
 
+% ============================================= Transpose (i,o)
+% Matrix is empty
+transpose([[]|_], []).
 
-toString( [X | Lista1]):-
+% Starting point
+transpose(Matrix, [Row|Rows]) :- 
+	transposeCol(Matrix, Row, SubMatrix),
+	transpose(SubMatrix, Rows).
+
+% End of column transposition
+transposeCol([], [], []).
+
+% Will transpose a column
+transposeCol([[ EntryA| ColumnsA]|RowsA], [ EntryA| SubRow], [ ColumnsA | Rows]) :- 
+	transposeCol(RowsA, SubRow, Rows).
+
+% ============================================= Print Matrix(i)
+printM( [X | Lista1]):-
 	write(X), nl,
-	toString(Lista1).
-
-
-
-
-
+	printM(Lista1).
 
