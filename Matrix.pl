@@ -29,7 +29,7 @@ main:-
 	k(K),
 	l(L),
 	m(M),
-	%Print out resulting Matrix objects to make sure it worked:
+	%Print out resulting Matrix objects to verify it worked:
 	printM(K),
 	printM(L),
 	printM(M),
@@ -38,13 +38,13 @@ main:-
 	%                      -2 3 3 4
 	%		       4 1 -1 0
 	%3) K+M... should give an error message (incompatible dimensions)
-	%and print null as the velue of the resulting matrix.
-	sum(K,L,R0),
-	printM(R0),
-	sum(L,K,R1),
-	printM(R1),
-	sum(K,M,R2),
-	printM(R2),
+	%write("----- Addition tests -----"),nl,
+	%sum(K,L,R0),
+	%printM(R0),
+	%sum(L,K,R1),
+	%printM(R1),
+	%sum(K,M,R2),
+	%printM(R2),
 	%Three substraction tests:
 	%1)K-L = 2 -2 -2 4
 	%        0 3 -1 0
@@ -54,12 +54,13 @@ main:-
 	%        -6 -1 -1 2
 	%3) K-M... should give an error message (incompatible dimensions)
 	% and print null as the velue of the resulting matrix.
-	substract(K,L,R3),
-	printM(R3),
-	substract(L,K,R4),
-	printM(R4),
-	substract(K,M,R5),
-	printM(R5),
+	%write("----- Substraction tests -----"),nl,
+	%substract(K,L,R3),
+	%printM(R3),
+	%substract(L,K,R4),
+	%printM(R4),
+	%substract(K,M,R5),
+	%printM(R5),
 	%Three multiplication tests:
 	%1)K*M = 10 -4
 	%        10 -2
@@ -69,16 +70,26 @@ main:-
 	%        3 -3
 	%3) K*K... should give an error message (incompatible dimensions)
 	% and print null as the velue of the resulting matrix.
+	write("----- Multiplication tests -----"),nl,
 	times(K,M,R6),
 	printM(R6),
+	%times(L,M,R7),
+	%printM(R7),
+	%times(K,K,R8),
+	%Two transposition tests:
+	%1)K(T) = 2 -1 5
+	%         0 3 1
+	%         1 1 0
+	%         3 2 -1
+	%2)M(T) = 1 2 -1 3
+	%         1 1 0 -2
+	%write("----- Transposition tests ----"),nl,
+	transpose(K,R9),
+	printM(R9),
+	transpose(M,R10),
+	printM(R10),
 	write("FIN").
-	%m(M),
-        %write(K),nl,
-        %write(L),nl,
-        %write(M),nl,
-	%% sum( K, L, X),
-	%transpose( M, X),
-	%write(X).
+
 
 % ============================================= Matrices:
 k([
@@ -147,8 +158,29 @@ substract( [ [ EntryA | ColumnsA] | RowsA ], [ [ EntryB | ColumnsB] | RowsB], [ 
 
 % ============================================= times(i,i,o)
 /*
-
+Explanation
 */
+
+% Matrix is empty
+times([[]|[]],[[]|[]],[[]|[]]):-!.
+% Transpose second matrix
+times(A,B,C):-
+	transpose(B,X),
+	times2(A,X,C).
+% Matrix is empty
+times2([[]|[]],[[]|[]],[[]|[]]):-!.
+%End of Row?
+times2([[]|RowsA],[[]|RowsX],[[]|RowsC]):-
+	write("Row Ended"),nl,
+	times2(RowsA,RowsX,RowsC).
+times2([[EntryA|ColumnsA]|RowsA],[[EntryX|ColumnsX]|RowsX],[[EntryC|ColumnsC]|RowsC]):-
+	write("Entered main method"),nl,
+	Value1 is EntryA*EntryX,
+	write(Value1),nl,
+	EntryC is Value1 ,%+ times2([ColumnsA|RowsA], [ColumnsX|RowsX], [ColumnsC|RowsC]),
+	times2([ColumnsA|RowsA], [ColumnsX|RowsX], [ColumnsC|RowsC]),
+	%times2([[EntryA|ColumnsA]|RowsA], [ColumnsX|RowsX], [ColumnsC|RowsC]),
+	write("FIN times2"),nl.
 
 
 % ============================================= Transpose (i,o)
