@@ -76,7 +76,16 @@ transposeCol([[ EntryA| ColumnsA]|RowsA], [ EntryA| SubRow], [ ColumnsA | Rows])
 	transposeCol(RowsA, SubRow, Rows).
 
 % ============================================= Print Matrix(i)
-printM( [X | Lista1]):-
-	write(X), nl,
-	printM(Lista1).
+printM([ [] | [] ] ):-  nl, nl, !.
+
+% End of Row?
+printM([ [] | ColumsA ] ):-
+	nl, printM(ColumsA).
+
+% Main Method
+printM( [ [ EntryA | ColumnsA] | RowsA ]):-
+	write( EntryA ), write(" "),
+	printM( [ ColumnsA | RowsA]).
+
+
 
